@@ -1,0 +1,131 @@
+---
+title: "gabovicen_OriginalHomeworkCode_04"
+author: "Gabriel Vicencio"
+date: "10/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+
+## Homework 04
+
+
+
+##1. Write a simple R function, Z.prop.test(), that can perform one- or two-sample Z-tests for proportion data
+
+```{r}
+z.prop.test<- function(p1, n1, p2 = NULL, n2= NULL, p0, alternative = "two.sided", cconf.level = 0.95) {
+  if(is.null(p2)) == TRUE {
+    z<- (p1 - p0)/ sqrt(p0*(1-p0)/n1)
+      if(alternative == "less") {
+         p<- pnorm(z, lower.tail = TRUE)
+      }
+      if(alternative == "greater"){
+         p<- pnorm(z, lower.tail = FALSE)
+      }
+      if(alternative == "two.sided") {
+          p<- 1-pnorm(z, lower.tail = TRUE) + pnorm(z, lower.tail = FALSE)
+      }
+    lower <- (p2-p1) - qnorm(1-(1-conf.level)/2) * sqrt((p1 * (1 - p1)/n1)+(p2 * (1 - p2)/n2))
+    upper <- (p2-p1) + qnorm(1-(1-conf.level)/2) * sqrt((p1 * (1 - p1)/n1)+(p2 * (1 - p2)/n2))
+    ci<- c(lower, upper)
+    result<-list(p,z,ci)
+    return(result)
+  }
+  
+  else{
+    pstar<- ((p1*n1)+(p2*n2))/(n1+n2)
+    z<- (p1 - pstar)/ sqrt(pstar*(1-pstar)/n1)
+      if(alternative == "less") {
+         p<- pnorm(z, lower.tail = TRUE)
+      }
+      if(alternative == "greater"){
+         p<- pnorm(z, lower.tail = FALSE)
+      }
+      if(alternative == "two.sided") {
+          p<- 1-pnorm(z, lower.tail = TRUE) + pnorm(z, lower.tail = FALSE)
+      }
+    lower <- (p2-p1) - qnorm(1-(1-conf.level)/2) * sqrt((p1 * (1 - p1)/n1)+(p2 * (1 - p2)/n2))
+    upper <- (p2-p1) + qnorm(1-(1-conf.level)/2) * sqrt((p1 * (1 - p1)/n1)+(p2 * (1 - p2)/n2))
+    ci<- c(lower, upper)
+    result<-list(p,z,ci)
+    return(result)
+  }
+    
+    if(n1*p1 < 5 || n1*(1-p1) < 5)
+  
+if (alternative == "less") {
+      p <- pnorm(z, lower.tail = TRUE)
+    }
+    if (alternative == "greater") {
+      p <- pnorm(z, lower.tail = FALSE)
+    }
+    if (alternative == "two.sided") {
+      if (z > 0) {
+        p <- 2 * pnorm(z, lower.tail = FALSE)
+      }  
+      if (z < 0)                    {
+        p <- 2 * pnorm(z, lower.tail = TRUE)
+                } 
+    }
+  }
+```
+x: a vector of counts of successes
+n: a vector of count trials
+alternative: a character string specifying the alternative hypothesis
+correct: a logical indicating whether Yates’ continuity correction should be applied where possible
+
+
+http://www.sthda.com/english/wiki/two-proportions-z-test-in-r
+
+
+##2. The dataset from Kamilar and Cooper has in it a large number of variables related to life history and body size. For this exercise, the end aim is to fit a simple linear regression model to predict longevity (MaxLongevity_m) measured in months from species’ brain size (Brain_Size_Species_Mean) measured in grams. Do the following for both longevity~brain size and log(longevity)~log(brain size):
+
+
+```{r}
+library(curl)
+f <- curl("https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/master/AN588_Fall21/KamilarAndCooperData.csv")
+d <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+head(d)
+```
+
+```{r}
+summary(d)
+```
+
+```{r}
+names(d)
+```
+
+```{r}
+g <- lm(d$Brain_Size_Species_Mean ~ d$MaxLongevity_m, data = d)
+g
+```
+
+```{r}
+glb <- ggplot(d, aes(x= d$MaxLongevity_m, y= d$Brain_Size_Species_Mean)) = (Brain Size = 0.4046 * Longevity - 65.3627) + geom_point xlab("Longevity") + ylab("Brain size") + geom_smooth(method = lm)
+glb
+```              
+
+
+```{r}
+l <- log(d$MaxLongevity_m) 
+b <- log(d$Brain_Size_Species_Mean)
+
+f <- cbind(d, l, b)
+head(d)
+names(d)
+
+n <- lm(b ~ l, data = d)
+n
+```
+
+
+
+
+
+
