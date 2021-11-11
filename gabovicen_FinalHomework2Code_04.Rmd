@@ -108,10 +108,13 @@ g
 ```
 
 ```{r}
-glb <- ggplot(d, aes(x= d$MaxLongevity_m, y= d$Brain_Size_Species_Mean)) = (Brain Size = 0.4046 * Longevity - 65.3627) + geom_point xlab("Longevity") + ylab("Brain size") + geom_smooth(method = lm)
+glb <- ggplot(d, aes(x= d$MaxLongevity_m, y= d$Brain_Size_Species_Mean)) + (Brain Size = 0.4046 * Longevity - 65.3627) + geom_point xlab("Longevity") + ylab("Brain size") + geom_smooth(method = lm)
 glb
 ```              
 
+*on the right track, but just some problems in your syntax. you are looking for:*
+
+ggplot(d, aes(x=MaxLongevity_m, y=Brain_Size_Species_Mean)) + geom_point() + xlab("Longevity") + ylab("Brain size") + geom_smooth(method = lm) + annotate("text",  label = "y = 0.4046x - 65.3627") 
 
 ```{r}
 l <- log(d$MaxLongevity_m) 
@@ -125,7 +128,7 @@ n <- lm(b ~ l, data = d)
 n
 ```
 
-
+*Keep practicing your ggplot. see module 12 for how to interpret the coefficients of your models. you have the right idea in the function you were trying to put on your graph.*
 
 
 
